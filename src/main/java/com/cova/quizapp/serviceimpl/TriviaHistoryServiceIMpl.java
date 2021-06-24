@@ -1,6 +1,6 @@
 package com.cova.quizapp.serviceimpl;
 
-import com.cova.quizapp.data.TriviaHistoryRepository;
+import com.cova.quizapp.data.TriviaHistoryRepo;
 import com.cova.quizapp.service.ITriviaHistoryService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Data
 public class TriviaHistoryServiceIMpl implements ITriviaHistoryService {
 
-    private  TriviaHistoryRepository triviaHistoryRepository;
+    private TriviaHistoryRepo triviaHistoryRepo;
 
     @Autowired
-    public TriviaHistoryServiceIMpl(TriviaHistoryRepository triviaHistoryRepository){
-        this.triviaHistoryRepository = triviaHistoryRepository;
+    public TriviaHistoryServiceIMpl(TriviaHistoryRepo triviaHistoryRepo){
+        this.triviaHistoryRepo = triviaHistoryRepo;
     }
 }

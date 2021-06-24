@@ -27,9 +27,8 @@ public class TriviaHistory {
     @Column(name = "num_failed_trivia")
     private Long failedTrivia;
 
-    @Column(name = "user_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", table = "users")
+    @JoinColumn(name = "user_id")
     private Users user;
 
 
