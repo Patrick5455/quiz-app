@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Data
-public class TriviaHistoryServiceIMpl implements ITriviaHistoryService {
+public class TriviaHistoryServiceImpl implements ITriviaHistoryService {
 
     private TriviaHistoryRepo triviaHistoryRepo;
 
     @Autowired
-    public TriviaHistoryServiceIMpl(TriviaHistoryRepo triviaHistoryRepo){
+    public TriviaHistoryServiceImpl(TriviaHistoryRepo triviaHistoryRepo){
         this.triviaHistoryRepo = triviaHistoryRepo;
     }
 }
