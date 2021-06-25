@@ -31,15 +31,23 @@ A simple quiz application REST API suite for users to answers set of questions b
 - Users can see their ranking among other trivia players
 
 
-### Project Setup
-- To setup this project locally, you must have the following installed locally:
+### Project Details
+
+#### Design
+- SOLID
+- TDD
+- Documentation
+- API Design
+
+#### Running the Project
+- To set-up this project locally, you must have the following installed locally:
 
     1. minimum of JDK 8
     2. Apache maven 3.6.3 and above
     3. SpringBoot version _ and above
     4. Mysql version 5.x+
  
-- at the root of the project run this command `mvn clean install`  
+- At the root of the project run this command `mvn clean install`  
     
 
 ### Api Docs
