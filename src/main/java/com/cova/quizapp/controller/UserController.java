@@ -1,20 +1,22 @@
 package com.cova.quizapp.controller;
 
-import com.cova.quizapp.service.IUserService;
-import com.cova.quizapp.serviceimpl.UserServiceImpl;
+import com.cova.quizapp.service.IAppUserService;
+import com.cova.quizapp.serviceimpl.AppUserServiceImpl;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = "/")
+@RestController
+@RequestMapping(value = "/")
 @Data
 public class UserController {
 
-    IUserService userService;
+    IAppUserService userService;
 
     @Autowired
-    private UserController(UserServiceImpl userService){
+    private UserController(AppUserServiceImpl userService){
         this.userService = userService;
     }
 
