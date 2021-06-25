@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @AutoConfigureMockMvc
 public class TriviaIntegrationTest {
 
+    // use springboot test resttmeplate to make real api calls
+
     @BeforeEach
     void setUp() {
     }
