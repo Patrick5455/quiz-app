@@ -1,7 +1,7 @@
 package com.cova.quizapp.unittest.controller;
 
 import com.cova.quizapp.service.IAppUserService;
-import com.cova.quizapp.serviceimpl.AppUserServiceImpl;
+import com.cova.quizapp.unittest.serviceimpl.AppUserServiceImpl;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
