@@ -1,4 +1,4 @@
-package com.cova.quizapp.unittest.controller;
+package com.cova.quizapp.controller;
 
 import com.cova.quizapp.service.ITriviaHistoryService;
 import com.cova.quizapp.serviceimpl.TriviaHistoryServiceImpl;
