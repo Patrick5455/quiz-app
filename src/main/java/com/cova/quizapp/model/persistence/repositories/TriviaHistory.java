@@ -1,4 +1,4 @@
-package com.cova.quizapp.model.persistence;
+package com.cova.quizapp.model.persistence.repositories;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
