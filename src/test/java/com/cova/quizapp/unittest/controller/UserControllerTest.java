@@ -1,6 +1,7 @@
 package com.cova.quizapp.unittest.controller;
 
 
+import com.cova.quizapp.controller.UserController;
 import com.cova.quizapp.service.IAppUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

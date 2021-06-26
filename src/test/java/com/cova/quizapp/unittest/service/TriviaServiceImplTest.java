@@ -1,4 +1,4 @@
-package com.cova.quizapp.unittest.serviceimpl;
+package com.cova.quizapp.unittest.service;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.cova.quizapp.unittest.serviceimpl;
+package com.cova.quizapp.serviceimpl;
 
 import com.cova.quizapp.data.AppUserRepository;
 import com.cova.quizapp.service.IAppUserService;

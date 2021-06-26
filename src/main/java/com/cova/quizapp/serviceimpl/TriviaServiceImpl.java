@@ -1,4 +1,4 @@
-package com.cova.quizapp.unittest.serviceimpl;
+package com.cova.quizapp.serviceimpl;
 
 import com.cova.quizapp.data.TriviaRepository;
 import com.cova.quizapp.service.ITriviaService;
