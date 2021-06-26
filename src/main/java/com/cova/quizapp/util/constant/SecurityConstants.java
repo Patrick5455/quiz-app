@@ -9,7 +9,7 @@ public interface SecurityConstants {
     String AUTHORIZATION_HEADER = "Authorization";
     String TOKEN_PREFIX = "Bearer ";
     String SIGN_UP_URL = "/v1/sign-up";
-    Long TOKEN_EXPIRATION_TIME = 1_000_000L;
+    Long TOKEN_EXPIRATION_TIME = 172_800L; //2 days
     String SECRET = "JWTTokenSecret";
 
 
