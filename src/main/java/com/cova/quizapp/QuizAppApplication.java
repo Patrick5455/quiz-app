@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableJpaRepositories("com.cova.quizapp.data")
-@EntityScan("com.cova.quizapp.model.persistence")
+@EntityScan("com.cova.quizapp.model.entity")
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class QuizAppApplication {
 

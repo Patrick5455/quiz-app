@@ -2,7 +2,7 @@ package com.cova.quizapp.serviceimpl;
 
 import com.cova.quizapp.data.UserRepository;
 import com.cova.quizapp.exception.UserSignUpOrSignInException;
-import com.cova.quizapp.model.persistence.AppUser;
+import com.cova.quizapp.model.entity.AppUser;
 import com.cova.quizapp.model.request.CreateUserRequest;
 import com.cova.quizapp.service.IUserService;
 import lombok.Data;
