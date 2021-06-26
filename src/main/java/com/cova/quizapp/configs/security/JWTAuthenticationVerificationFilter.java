@@ -30,9 +30,7 @@ public class JWTAuthenticationVerificationFilter extends BasicAuthenticationFilt
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)  throws IOException, ServletException {
-
         String header = req.getHeader(AUTHORIZATION_HEADER);
-
         if(header == null || !header.startsWith(TOKEN_PREFIX)){
             chain.doFilter(req, res);
             return;
@@ -40,7 +38,6 @@ public class JWTAuthenticationVerificationFilter extends BasicAuthenticationFilt
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
-
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req){
