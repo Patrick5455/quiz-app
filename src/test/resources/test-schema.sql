@@ -1,10 +1,9 @@
 -- DROP IF EXISTS DATABASE covatriviadb;
 
-CREATE SCHEMA IF NOT EXISTS covatriviadb;
+CREATE SCHEMA IF NOT EXISTS TESTQUIZDB;
 
-USE covatriviadb;
 
-CREATE TABLE  IF NOT EXISTS  APP_USER(
+CREATE TABLE  APP_USER(
                                          id INT AUTO_INCREMENT   PRIMARY KEY,
                                          first_name VARCHAR(256) NOT NULL,
                                          last_name VARCHAR(250) NOT NULL,
@@ -17,14 +16,14 @@ CREATE TABLE  IF NOT EXISTS  APP_USER(
                                          deleted_at timestamp
 );
 
-CREATE TABLE IF NOT EXISTS TRIVIA(
+CREATE TABLE TRIVIA(
                                      id INT AUTO_INCREMENT   PRIMARY KEY,
                                      question VARCHAR (256) NOT NULL,
                                      answer VARCHAR (256) NOT NULL,
                                      difficulty_level VARCHAR (256)
 );
 
-CREATE TABLE IF NOT EXISTS TRIVIA_HISTORY (
+CREATE TABLE TRIVIA_HISTORY (
                                               id INT AUTO_INCREMENT PRIMARY KEY,
                                               date_of_trivia timestamp,
                                               num_passed_trivia INT,

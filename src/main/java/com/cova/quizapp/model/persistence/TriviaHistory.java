@@ -1,4 +1,4 @@
-package com.cova.quizapp.model;
+package com.cova.quizapp.model.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Table(name = "TRIVIA_HISTORY")
+@Table(name = "trivia_history")
 @Entity
 @Data
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class TriviaHistory {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private AppUser appUser;
 
 
 }

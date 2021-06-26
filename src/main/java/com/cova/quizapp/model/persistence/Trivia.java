@@ -1,4 +1,4 @@
-package com.cova.quizapp.model;
+package com.cova.quizapp.model.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TRIVIA")
+@Table(name = "trivia")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +24,8 @@ public class Trivia {
     private String answer;
 
     @Column(name = "difficulty_level")
-    private String difficultyLevel;
-
+    @Enumerated(EnumType.STRING)
+    private DifficultyLevel difficultyLevel;
 
     public enum DifficultyLevel{
         HARD,

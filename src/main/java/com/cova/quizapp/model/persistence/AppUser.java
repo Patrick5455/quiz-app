@@ -1,4 +1,4 @@
-package com.cova.quizapp.model;
+package com.cova.quizapp.model.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,11 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS" )
+@Table(name = "app_user" )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,19 +31,19 @@ public class Users {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "salt")
-    private String salt;
-
     @Column(name = "password")
     private String password;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "appUser")
     private List<TriviaHistory> triviaHistories;
 
 
