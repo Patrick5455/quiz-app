@@ -41,15 +41,19 @@ public class AppUser {
 
     @Column(name = "password")
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @Column(name = "created_at")
+    @JsonIgnore
     private Timestamp createdAt;
 
     @Column(name = "is_active")
+    @JsonIgnore
     private Boolean isActive;
 
     @Column(name = "updated_at")
+    @JsonIgnore
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
