@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1/cova/trivia")
-@Data
 public class TriviaController {
 
-    private  ITriviaService triviaService;
+    private ITriviaService triviaService;
 
     @Autowired
     public TriviaController(TriviaServiceImpl triviaService){

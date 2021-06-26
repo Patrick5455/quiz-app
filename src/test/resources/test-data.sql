@@ -1,4 +1,3 @@
-USE covatriviadb;
 
 INSERT INTO trivia (id, answer, difficulty_level, question)
 VALUES (1, 'a', 'easy', 'what is the first letter of the alphabet'),
