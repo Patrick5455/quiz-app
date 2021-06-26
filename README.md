@@ -36,6 +36,8 @@ A simple quiz application REST API suite for users to answers set of questions b
 #### Design
 - SOLID
 - TDD
+  - Unit Test
+  - Integration Test  
 - Documentation
 - API Design
 
@@ -47,8 +49,8 @@ A simple quiz application REST API suite for users to answers set of questions b
     3. SpringBoot version _ and above
     4. Mysql version 5.x+
  
-- At the root of the project run this command `mvn clean install`  
-    
+- At the root of the project run this command `mvn clean install`
+This would run both the main application and the tests (both unit and integration tests)
 
 ### Api Docs
-[Link to api collection on postman](google.com)
+[cova-trivia postman api collection](https://documenter.getpostman.com/view/10629518/TzedhQAB)
