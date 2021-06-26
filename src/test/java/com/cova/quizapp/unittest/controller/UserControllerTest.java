@@ -2,7 +2,7 @@ package com.cova.quizapp.unittest.controller;
 
 
 import com.cova.quizapp.controller.UserController;
-import com.cova.quizapp.service.IAppUserService;
+import com.cova.quizapp.service.IUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ class UserControllerTest {
      MockMvc mockMvc;
 
     @MockBean
-     IAppUserService appUserService;
+    IUserService appUserService;
 
     @BeforeEach
     void setUp() {

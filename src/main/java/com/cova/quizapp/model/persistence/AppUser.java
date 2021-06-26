@@ -1,10 +1,13 @@
-package com.cova.quizapp.model.persistence.repositories;
+package com.cova.quizapp.model.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AppUser {
 
     @Id
@@ -20,18 +24,23 @@ public class AppUser {
     private Long id ;
 
     @Column(name = "first_name")
+    @NotBlank
     private String firstname;
 
     @Column(name = "last_name")
+    @NotBlank
     private String lastname;
 
     @Column(name = "email")
+    @NotBlank
     private String email;
 
     @Column(name = "username")
+    @NotBlank
     private String username;
 
     @Column(name = "password")
+    @NotBlank
     private String password;
 
     @Column(name = "created_at")
@@ -43,7 +52,8 @@ public class AppUser {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "appUser")
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<TriviaHistory> triviaHistories;
 
 
