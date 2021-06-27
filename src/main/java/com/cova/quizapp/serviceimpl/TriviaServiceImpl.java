@@ -77,7 +77,4 @@ public class TriviaServiceImpl implements ITriviaService {
         return null;
     }
 
-
-
-
 }
