@@ -15,4 +15,7 @@ public class TriviaServiceImpl implements ITriviaService {
     @Autowired
     public TriviaServiceImpl(TriviaRepository triviaRepository){
         this.triviaRepository = triviaRepository; }
+
+
+
 }
