@@ -1,5 +1,6 @@
 package com.cova.quizapp.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class TriviaHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id ;
 
     @Column(name = "date_of_trivia")
@@ -29,7 +31,12 @@ public class TriviaHistory {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private AppUser appUser;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level")
+    private Trivia.DifficultyLevel level;
 
 
     @Override

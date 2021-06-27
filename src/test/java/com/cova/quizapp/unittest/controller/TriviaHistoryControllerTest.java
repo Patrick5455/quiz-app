@@ -1,7 +1,6 @@
 package com.cova.quizapp.unittest.controller;
 
 import com.cova.quizapp.controller.TriviaHistoryController;
-import com.cova.quizapp.service.ITriviaHistoryService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;

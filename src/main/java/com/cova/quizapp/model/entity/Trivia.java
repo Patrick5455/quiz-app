@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "trivia")
@@ -18,9 +19,11 @@ public class Trivia {
     private Long id ;
 
     @Column(name = "question")
+    @NotNull
     private String question;
 
     @Column(name = "answer")
+    @NotNull
     private String answer;
 
     @Column(name = "difficulty_level")
@@ -28,9 +31,14 @@ public class Trivia {
     private DifficultyLevel difficultyLevel;
 
     public enum DifficultyLevel{
-        HARD,
-        MEDIUM,
-        EASY
+        HARD(20),
+        MEDIUM(10),
+        EASY(5);
+
+        int numQos;
+
+         DifficultyLevel(int numQos){ this.numQos = numQos; }
+        public int getNumQos() { return numQos; }
     }
 
     @Override

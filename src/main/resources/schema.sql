@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS TRIVIA(
                                      id INT AUTO_INCREMENT   PRIMARY KEY,
                                      question VARCHAR (256) NOT NULL,
                                      answer VARCHAR (256) NOT NULL,
-                                     difficulty_level VARCHAR (256)
+                                     difficulty_level VARCHAR (256) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS TRIVIA_HISTORY (
@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS TRIVIA_HISTORY (
                                               date_of_trivia timestamp,
                                               num_passed_trivia INT,
                                               num_failed_trivia INT,
-                                              user_id INT,
+                                              level VARCHAR(256) NOT NULL,
+                                             user_id INT,
                                               FOREIGN KEY (user_id) REFERENCES APP_USER (id)
 );
