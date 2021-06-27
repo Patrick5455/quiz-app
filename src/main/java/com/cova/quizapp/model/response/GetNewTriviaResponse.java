@@ -5,8 +5,7 @@ import lombok.Data;
 
 @JsonDeserialize
 @Data
-
-public class GetTriviaResponse {
+public class GetNewTriviaResponse implements TriviaResponse {
     private String question;
     private String level;
 }

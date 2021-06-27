@@ -1,9 +1,8 @@
 package com.cova.quizapp.service;
 
 import com.cova.quizapp.model.entity.Trivia;
-import com.cova.quizapp.model.response.GetTriviaHistoryResponse;
-import com.cova.quizapp.model.response.GetTriviaResponse;
-import com.cova.quizapp.model.response.GetTriviaResultResponse;
+
+import com.cova.quizapp.model.response.TriviaResponse;
 
 public interface ITriviaService {
 
@@ -14,21 +13,25 @@ public interface ITriviaService {
 
      /**
       * @param level trivia difficulty level
-      * @return an instance of GetTriviaResponse
+      * @return an instance of GetNewTriviaResponse
       * **/
-     GetTriviaResponse getTrivia(Trivia.DifficultyLevel level);
+     TriviaResponse getTrivia(Trivia.DifficultyLevel level);
 
      /**
       * @return an instance of GetTriviaHistoryResponse
       * **/
-     GetTriviaHistoryResponse getTriviaHistory();
+     TriviaResponse getTriviaHistory();
 
-     void endTrivia();
+     /**
+      * @param level difficulty level
+      * @return an instance of GetTriviaResultResponse
+      **/
+     TriviaResponse endTrivia(Trivia.DifficultyLevel level);
 
      /**
       * @return result of trivia(s) taken
       * **/
-     GetTriviaResultResponse getTriviaResult();
+     TriviaResponse getTriviaResult();
 
 
 
