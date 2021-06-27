@@ -1,5 +1,6 @@
 package com.cova.quizapp.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,14 +32,17 @@ public class Trivia {
     private DifficultyLevel difficultyLevel;
 
     public enum DifficultyLevel{
+        @JsonProperty(value = "HARD")
         HARD(20),
+        @JsonProperty(value = "MEDIUM")
         MEDIUM(10),
+        @JsonProperty(value = "EASY")
         EASY(5);
 
-        int numQos;
+        int numOfAllowedQosForLevel;
 
-         DifficultyLevel(int numQos){ this.numQos = numQos; }
-        public int getNumQos() { return numQos; }
+         DifficultyLevel(int numOfAllowedQosForLevel){ this.numOfAllowedQosForLevel = numOfAllowedQosForLevel; }
+        public int getNumOfAllowedQosForLevel() { return numOfAllowedQosForLevel; }
     }
 
     @Override

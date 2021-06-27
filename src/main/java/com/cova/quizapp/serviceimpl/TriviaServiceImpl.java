@@ -27,6 +27,8 @@ public class TriviaServiceImpl implements ITriviaService {
     static long totalAvailableQuestions =0;
     static List<Integer> qosAnswered = new ArrayList<>();
     static GetTriviaResultResponse triviaResult = new GetTriviaResultResponse();
+    static int BONUS_QUESTION_NO = 0;
+    static List<Long> qosIDs = new ArrayList<>();
 
     @Autowired
     public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo){
@@ -37,26 +39,33 @@ public class TriviaServiceImpl implements ITriviaService {
     @Override
     public void startTrivia(Trivia.DifficultyLevel level) {
         if(totalAvailableQuestions > 0) totalAvailableQuestions = 0;
-        totalAvailableQuestions = triviaRepository.countAllByDifficultyLevel(level);
+        qosIDs = triviaRepository.getTriviaIds(level.name()).orElse(new ArrayList<>());
+        totalAvailableQuestions = qosIDs.size();
+        log.info("total available questions for level {} = {}", level, totalAvailableQuestions);
     }
 
     @Override
     public TriviaResponse getTrivia(Trivia.DifficultyLevel level) {
         Trivia trivia = new Trivia();
         GetNewTriviaResponse newTrivia = new GetNewTriviaResponse();
-        if(totalAvailableQuestions == 0)
+        if(totalAvailableQuestions == 0) {
+            log.info("getting total question in DB from getTrivia");
             totalAvailableQuestions = triviaRepository.countAllByDifficultyLevel(level);
-        if(qosAnswered.size() <= level.getNumQos()) {
+        }
+        if(qosAnswered.size() < level.getNumOfAllowedQosForLevel() && qosAnswered.size() < totalAvailableQuestions) {
             int nextQos = qosAnswered.size();
-            trivia = triviaRepository.findById((long)nextQos++).orElse(null);
+            log.info("next qos number {}", nextQos);
+            trivia = triviaRepository.findByDifficultyLevelAndId(level, qosIDs.get(nextQos)).orElse(null);
             qosAnswered.add(nextQos);
-        } else endTrivia(level);
+            log.info("got trivia from DB {}", trivia);
+        } else return endTrivia(level);
         newTrivia.setLevel(level.name());
         if(trivia != null) {
             newTrivia.setQuestion(trivia.getQuestion());
         }
         else {
             newTrivia.setQuestion("Bonus Question: what is your name?");
+            qosAnswered.add(BONUS_QUESTION_NO);
         }
         return newTrivia;
     }
@@ -69,6 +78,7 @@ public class TriviaServiceImpl implements ITriviaService {
         triviaResult.setDifficulty_level(level.name());
         double percentScore = triviaResult.getTotal_passed() /100.0;
         triviaResult.setPerformance(GetTriviaResultResponse.Performance.getPerformance(percentScore).name());
+       log.info("end trivia. Trivia Result {}", triviaResult);
         return triviaResult;
     }
 
