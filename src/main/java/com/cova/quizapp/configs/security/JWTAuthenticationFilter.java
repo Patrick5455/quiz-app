@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +47,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             LoginRequest credentials = new ObjectMapper().readValue(
                     request.getInputStream(), LoginRequest.class);
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            credentials.getUsername(),
-                            credentials.getPassword(),
-                            new ArrayList<>())
-            );
+            try {
+               return authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                credentials.getUsername(),
+                                credentials.getPassword(),
+                                new ArrayList<>())
+                );
+            }
+            catch (Exception e){
+                throw new UsernameNotFoundException("incorrect login details");
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -64,12 +70,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                          FilterChain chain,
                                          Authentication auth) throws IOException, ServletException{
 
+
         String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
-
-        log.info("created jwt {}", token);
 
         res.addHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX+token);
         res.setStatus(200);

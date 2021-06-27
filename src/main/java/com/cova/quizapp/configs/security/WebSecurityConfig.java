@@ -25,10 +25,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private BCryptPasswordEncoder encoder;
 
+    private JWTEntryPoint jwtEntryPoint;
+
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder encoder){
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder encoder, JWTEntryPoint jwt){
         this.userDetailsService = userDetailsService;
         this.encoder = encoder;
+        this.jwtEntryPoint = jwt;
     }
 
     @Override
@@ -36,9 +39,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL)
                 .permitAll()
-//                .antMatchers(HttpMethod.POST, "/v1/cova/login")
-                //.permitAll()
+                .antMatchers(HttpMethod.GET, "/v1/cova/h2-console")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/v1/cova")
+                .permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManagerBean()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManagerBean()))

@@ -1,6 +1,8 @@
 package com.cova.quizapp.controller;
 
+import com.auth0.jwt.JWT;
 import com.cova.quizapp.model.request.CreateUserRequest;
+import com.cova.quizapp.model.response.ApiResponse;
 import com.cova.quizapp.service.IUserService;
 import com.cova.quizapp.serviceimpl.UserServiceImpl;
 import lombok.Data;
@@ -8,10 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.cova.quizapp.util.constant.SecurityConstants.SECRET;
 
 
 @RestController
@@ -28,6 +36,12 @@ public class SessionController {
         this.userService = userService;
     }
 
+    @GetMapping("")
+    public String home(){
+        return "welcome to cova trivia";
+    }
+
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> signupNewUser( @RequestBody CreateUserRequest createUserRequest){
 
@@ -39,5 +53,24 @@ public class SessionController {
             }
         return ResponseEntity.ok().body("user successfully created");
     }
+
+    public void  logout(HttpServletRequest request){
+
+
+        JWT.require(HMAC512(SECRET.getBytes())).acceptExpiresAt(0L);
+
+    }
+
+    @PostMapping("/logout")
+    public  ResponseEntity<?> logout (HttpServletRequest request, HttpServletResponse response){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication != null){
+            new SecurityContextLogoutHandler().logout(request, response , authentication);
+        }
+        return ResponseEntity.ok(ApiResponse.response("successfully logged out", 200));
+    }
+
+
 
 }

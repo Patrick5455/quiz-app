@@ -1,6 +1,8 @@
 package com.cova.quizapp.configs.security;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.impl.ClaimsHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +15,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Size;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.cova.quizapp.util.constant.SecurityConstants.*;
 
 @Component
+@Slf4j
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Autowired
@@ -36,6 +40,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
     }
@@ -46,6 +51,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             String user = JWT.require(HMAC512(SECRET.getBytes())).build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
+
+
             if(user != null){
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }
