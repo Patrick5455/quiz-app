@@ -39,10 +39,10 @@ public class Trivia {
         @JsonProperty(value = "EASY")
         EASY(5);
 
-        int numOfAllowedQosForLevel;
+        int numOfAllowedTriviaForLevel;
 
-         DifficultyLevel(int numOfAllowedQosForLevel){ this.numOfAllowedQosForLevel = numOfAllowedQosForLevel; }
-        public int getNumOfAllowedQosForLevel() { return numOfAllowedQosForLevel; }
+         DifficultyLevel(int numOfAllowedTriviaForLevel){ this.numOfAllowedTriviaForLevel = numOfAllowedTriviaForLevel; }
+        public int getNumOfAllowedTriviaForLevel() { return numOfAllowedTriviaForLevel; }
     }
 
     @Override

@@ -13,9 +13,17 @@ public interface ITriviaService {
 
      /**
       * @param level trivia difficulty level
+      * @param previousAnswers answer to previously answered trivia - used to update the map of user answered trivia
+      * @param previousTriviaId id of previously answered trivia
       * @return an instance of GetNewTriviaResponse
       * **/
-     TriviaResponse getTrivia(Trivia.DifficultyLevel level);
+     TriviaResponse getNextTrivia(Trivia.DifficultyLevel level, Object previousAnswers, int previousTriviaId);
+
+     /**
+      * @param level trivia difficulty level
+      * @return an instance of GetNewTriviaResponse
+      * **/
+     TriviaResponse getNextTrivia(Trivia.DifficultyLevel level);
 
      /**
       * @return an instance of GetTriviaHistoryResponse
@@ -28,6 +36,11 @@ public interface ITriviaService {
       **/
      TriviaResponse endTrivia(Trivia.DifficultyLevel level);
 
+
+     /**
+      * @return the total number of questions answered right by client
+      **/
+     int getTotalCorrectQuestions();
 
 
 

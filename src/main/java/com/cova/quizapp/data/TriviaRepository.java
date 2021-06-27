@@ -16,6 +16,8 @@ public interface TriviaRepository extends JpaRepository<Trivia, Long> {
    @Query(value = GET_ALL_ID_FOR_QUESTION_DIFFICULTY, nativeQuery = true)
    Optional<List<Long>> getTriviaIds(String level);
 
+   Optional<List<Trivia>> findByDifficultyLevel(Trivia.DifficultyLevel level);
+
    Optional<Trivia> findByDifficultyLevelAndId(Trivia.DifficultyLevel level, long qosId);
 
     @Query(value = FIND_TRIVIA_ANSWER_BY_TRIVIA_QUESTION_ID, nativeQuery = true)
