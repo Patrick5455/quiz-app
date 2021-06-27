@@ -47,7 +47,7 @@ public class UserServiceImpl implements IUserService {
                     .email(param.getEmail())
                     .username(param.getUsername())
                     .password(encoder.encode(param.getPassword()))
-                    .isActive(true)
+                    .isActive(1)
                     .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
             long insertedId = userRepository.save(newUser).getId();

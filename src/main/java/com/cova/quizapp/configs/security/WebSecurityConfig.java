@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.cova.quizapp.util.constant.SecurityConstants.SIGN_UP_URL;
@@ -36,10 +35,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL)
-                .permitAll().anyRequest().authenticated()
+                .permitAll()
+//                .antMatchers(HttpMethod.POST, "/v1/cova/login")
+                //.permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManagerBean()))
-                .addFilter(new JWTAuthenticationVerificationFilter(authenticationManagerBean()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManagerBean()))
+                // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(STATELESS);
     }
 

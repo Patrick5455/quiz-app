@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -25,10 +26,12 @@ public class AppUser {
 
     @Column(name = "first_name")
     @NotBlank
+    @NotNull
     private String firstname;
 
     @Column(name = "last_name")
     @NotBlank
+    @NotNull
     private String lastname;
 
     @Column(name = "email")
@@ -37,6 +40,7 @@ public class AppUser {
 
     @Column(name = "username")
     @NotBlank
+    @NotNull
     private String username;
 
     @Column(name = "password")
@@ -46,11 +50,12 @@ public class AppUser {
 
     @Column(name = "created_at")
     @JsonIgnore
+    @NotNull
     private Timestamp createdAt;
 
     @Column(name = "is_active")
     @JsonIgnore
-    private Boolean isActive;
+    private int isActive;
 
     @Column(name = "updated_at")
     @JsonIgnore

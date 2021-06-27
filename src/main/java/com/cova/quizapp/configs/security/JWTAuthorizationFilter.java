@@ -21,11 +21,11 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.cova.quizapp.util.constant.SecurityConstants.*;
 
 @Component
-public class JWTAuthenticationVerificationFilter extends BasicAuthenticationFilter {
+public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Autowired
-    public JWTAuthenticationVerificationFilter(AuthenticationManager authMnger){
-        super(authMnger);
+    public JWTAuthorizationFilter(AuthenticationManager authManager){
+        super(authManager);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.cova.quizapp.configs.security;
 
 import com.auth0.jwt.JWT;
+import com.cova.quizapp.model.request.CreateUserRequest;
+import com.cova.quizapp.model.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +27,6 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.cova.quizapp.util.constant.SecurityConstants.*;
 
 @Component
-@Data
 @Slf4j
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -35,13 +36,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authMgr) {
         super(authMgr);
         authenticationManager = authMgr;
+
+        setFilterProcessesUrl("/v1/cova/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            User credentials = new ObjectMapper().readValue(
-                    request.getInputStream(), User.class);
+
+            LoginRequest credentials = new ObjectMapper().readValue(
+                    request.getInputStream(), LoginRequest.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             credentials.getUsername(),
@@ -65,7 +69,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
 
+        log.info("created jwt {}", token);
+
         res.addHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX+token);
+        res.setStatus(200);
 
     }
 

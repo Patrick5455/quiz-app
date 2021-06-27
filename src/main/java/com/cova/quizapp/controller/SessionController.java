@@ -1,6 +1,5 @@
 package com.cova.quizapp.controller;
 
-import com.cova.quizapp.exception.UserSignUpOrSignInException;
 import com.cova.quizapp.model.request.CreateUserRequest;
 import com.cova.quizapp.service.IUserService;
 import com.cova.quizapp.serviceimpl.UserServiceImpl;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping(value = "/v1/cova")
@@ -29,7 +29,7 @@ public class SessionController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signupNewUser(@RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<?> signupNewUser( @RequestBody CreateUserRequest createUserRequest){
 
         try {
             long lastInsertedId = userService.createUser(createUserRequest);

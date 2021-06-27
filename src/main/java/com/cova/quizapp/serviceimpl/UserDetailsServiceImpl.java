@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         UserDetails userDetails = new User(appUser.getUsername(), appUser.getPassword(), new ArrayList<>());
-        log.info("user details successfully loaded");
+        log.info("login request user found");
         return userDetails;
     }
 }
