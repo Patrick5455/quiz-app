@@ -28,10 +28,7 @@ public interface ITriviaService {
       **/
      TriviaResponse endTrivia(Trivia.DifficultyLevel level);
 
-     /**
-      * @return result of trivia(s) taken
-      * **/
-     TriviaResponse getTriviaResult();
+
 
 
 

@@ -73,11 +73,6 @@ public class TriviaServiceImpl implements ITriviaService {
     }
 
     @Override
-    public GetTriviaResultResponse getTriviaResult() {
-        return null;
-    }
-
-    @Override
     public GetTriviaHistoryResponse getTriviaHistory() {
         return null;
     }
