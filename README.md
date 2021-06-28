@@ -8,7 +8,7 @@ A simple quiz application REST API suite for users to answers set of questions b
 <small>These functional requirements have been unit tested as well<small/>
 
 #### Signup and Login
-- User can signup with their email, firstname, lastname, username and password\
+- User can signup with their email, firstname, lastname, username and password
 - User can get a notification for successful signup
 - User can get a notification for a failed signup  
 - User can log-in with their username and password

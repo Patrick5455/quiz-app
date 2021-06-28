@@ -36,7 +36,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authMgr) {
         super(authMgr);
         authenticationManager = authMgr;
-
         setFilterProcessesUrl("/v1/cova/login");
     }
 
