@@ -17,7 +17,7 @@ public interface ITriviaService {
       * @param previousTriviaId id of previously answered trivia
       * @return an instance of GetNewTriviaResponse
       * **/
-     TriviaResponse getNextTrivia(Trivia.DifficultyLevel level, Object previousAnswers, int previousTriviaId);
+     TriviaResponse getNextTrivia(Trivia.DifficultyLevel level, String previousAnswers, int previousTriviaId);
 
      /**
       * @param level trivia difficulty level
@@ -38,9 +38,10 @@ public interface ITriviaService {
 
 
      /**
-      * @return the total number of questions answered right by client
-      **/
-     int getTotalCorrectQuestions();
+      *
+      * @param level difficulty level
+      */
+     void calculateResult(Trivia.DifficultyLevel level);
 
 
 

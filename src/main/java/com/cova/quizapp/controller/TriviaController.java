@@ -40,4 +40,19 @@ public class TriviaController {
         return ResponseEntity.ok().body(trivia);
     }
 
+    @GetMapping("/next-trivia")
+    public ResponseEntity<?> nextTrivia(@RequestParam("level") String level,
+                                        @RequestParam("prev_qos_id") int id,
+                                        @RequestParam("prev_ans") String answer){
+
+      TriviaResponse triviaResponse =  triviaService.getNextTrivia(Trivia.DifficultyLevel.valueOf(level), answer, id);
+        return ResponseEntity.ok().body(triviaResponse);
+    }
+
+    @GetMapping("/end-trivia")
+    public ResponseEntity<?> endTrivia(@RequestParam("level") String level){
+        TriviaResponse response = triviaService.endTrivia(Trivia.DifficultyLevel.valueOf(level));
+        return ResponseEntity.ok(response);
+    }
+
 }
