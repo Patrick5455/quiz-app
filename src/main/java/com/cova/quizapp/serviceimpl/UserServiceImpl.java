@@ -31,11 +31,11 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public long createUser(CreateUserRequest param) throws UserSignUpOrSignInException {
-        if(param.getPassword() == null || param.getConfirmPassword() == null){
+        if(param.getPassword() == null || param.getConfirm_password() == null){
             log.error("please fill all required fields for password");
             throw new UserSignUpOrSignInException("please fill all required fields for password");
         }
-        if(!param.getPassword().trim().equals(param.getConfirmPassword().trim())){
+        if(!param.getPassword().trim().equals(param.getConfirm_password().trim())){
             log.error("password fields and confirm passwords field do not match");
             throw new UserSignUpOrSignInException("password fields and confirm passwords field do not match");
         }

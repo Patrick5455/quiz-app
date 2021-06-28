@@ -25,6 +25,6 @@ public class CreateUserRequest {
     private String password;
     @NotBlank
     @NotNull
-    private String confirmPassword;
+    private String confirm_password;
 
 }

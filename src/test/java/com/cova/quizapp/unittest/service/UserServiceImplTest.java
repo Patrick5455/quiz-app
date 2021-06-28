@@ -28,7 +28,7 @@ class UserServiceImplTest {
         createUserRequest.setEmail("testuser@email.com");
         createUserRequest.setUsername("test-user");
         createUserRequest.setPassword("test-password");
-        createUserRequest.setConfirmPassword("test-password");
+        createUserRequest.setConfirm_password("test-password");
     }
 
     @AfterEach
