@@ -39,11 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL)
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/v1/cova/h2-console")
+                .antMatchers(HttpMethod.GET ,"/v1/cova")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/v1/cova")
-                .permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/h2-console/**").permitAll().anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint)
@@ -52,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JWTAuthorizationFilter(authenticationManagerBean()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(STATELESS);
+
+        httpSecurity.headers().frameOptions().disable();
     }
 
     @Bean
