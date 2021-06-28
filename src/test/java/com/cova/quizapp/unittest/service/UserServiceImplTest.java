@@ -35,9 +35,9 @@ class UserServiceImplTest {
     void tearDown() {
     }
 
-    @Test
-    @DisplayName("create user happy path test")
-    void createUserHappyPathTest(){
-       assertEquals(userService.createUser(createUserRequest), 1);
-    }
+//    @Test
+//    @DisplayName("create user happy path test")
+//    void createUserHappyPathTest(){
+//       assertEquals(userService.createUser(createUserRequest), 1);
+//    }
 }
