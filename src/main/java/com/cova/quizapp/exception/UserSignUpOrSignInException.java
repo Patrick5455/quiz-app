@@ -14,6 +14,11 @@ public class UserSignUpOrSignInException extends RuntimeException{
         super(message);
     }
 
+    public UserSignUpOrSignInException(){
+        super("public UserSignUpOrSignInException(String message, Throwable cause");
+    }
+
+
     public UserSignUpOrSignInException(Throwable throwable){
         super("inappropriate arguments were provided", throwable);
     }
