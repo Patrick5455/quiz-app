@@ -1,9 +1,11 @@
 package com.cova.quizapp.model.entity;
 
+import com.cova.quizapp.model.response.GetTriviaResultResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -24,19 +26,33 @@ public class TriviaHistory {
     private Timestamp triviaDate;
 
     @Column(name = "num_passed_trivia")
-    private Long passedTrivia;
+    private Integer passedTrivia;
 
     @Column(name = "num_failed_trivia")
-    private Long failedTrivia;
+    private Integer failedTrivia;
+
+    @Column(name = "total_score")
+    private Double totalScore;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty_level")
+    private Trivia.DifficultyLevel difficultyLevel;
+
+    @Column(name = "num_of_answered_trivia")
+    private Integer numOfAnsweredTrivia;
+
+    @Column(name = "performance")
+    @Enumerated(EnumType.STRING)
+    private GetTriviaResultResponse.Performance performance;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonIgnore
+    @ToString.Exclude
     private AppUser appUser;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "level")
-    private Trivia.DifficultyLevel level;
+    @Column(name = "total_trivia_given")
+    private Integer totalTriviaGiven;
 
 
     @Override

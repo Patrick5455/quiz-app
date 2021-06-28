@@ -2,22 +2,26 @@ package com.cova.quizapp.serviceimpl;
 
 import com.cova.quizapp.data.TriviaHistoryRepo;
 import com.cova.quizapp.data.TriviaRepository;
+import com.cova.quizapp.model.entity.AppUser;
 import com.cova.quizapp.model.entity.Trivia;
+import com.cova.quizapp.model.entity.TriviaHistory;
 import com.cova.quizapp.model.response.GetNewTriviaResponse;
 import com.cova.quizapp.model.response.GetTriviaHistoryResponse;
 import com.cova.quizapp.model.response.GetTriviaResultResponse;
 import com.cova.quizapp.model.response.TriviaResponse;
 import com.cova.quizapp.service.ITriviaService;
+import com.cova.quizapp.service.IUserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,34 +31,33 @@ public class TriviaServiceImpl implements ITriviaService {
 
     private TriviaRepository triviaRepository;;
     private TriviaHistoryRepo triviaHistoryRepo;
+    private IUserService userService;
 
-    static long totalAvailableTrivia =0;
-    static List<Integer> totalTriviaAnswered = new ArrayList<>();
-    static GetTriviaResultResponse triviaResult = new GetTriviaResultResponse();
-    static int BONUS_TRIVIA = 0;
-    static List<Long> triviaIds = new ArrayList<>();
-    static Map<Long, String> triviaCorrectAnswers = new HashMap<>();
-    static Map<Long, String> userTriviaAnswers = new HashMap<>();
-    static int correctAnswersCount =0 ;
-    static int wrongAnswersCount =0;
-
-
+    static long totalAvailableTrivia;
+    static List<Integer> totalTriviaAnswered ;
+    static GetTriviaResultResponse triviaResult;
+    static int BONUS_TRIVIA;
+    static List<Long> triviaIds;
+    static Map<Long, String> triviaCorrectAnswers;
+    static Map<Long, String> userTriviaAnswers;
+    static int correctAnswersCount;
+    static int wrongAnswersCount;
+    static boolean resultComputed;
 
     @Autowired
-    public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo){
+    public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo,
+                             UserServiceImpl userService){
         this.triviaRepository = triviaRepository;
         triviaHistoryRepo = repo;
+        this.userService = userService;
     }
 
     @Override
     public void startTrivia(Trivia.DifficultyLevel level) {
-        if(totalAvailableTrivia > 0) totalAvailableTrivia = 0;
-        // get list of trivia to be asked from DB
+        resetTriviaSessionData();
         List<Trivia> triviaList = triviaRepository.findByDifficultyLevel(level).orElse(new ArrayList<>());
-        // get ids of fetched trivia
         triviaIds = triviaList.stream().map(Trivia::getId).collect(Collectors.toList());
         totalAvailableTrivia = triviaList.size();
-        // get answers of fetched list of trivia
         triviaList.forEach(T -> triviaCorrectAnswers.put(T.getId(), T.getAnswer()));
     }
 
@@ -64,12 +67,9 @@ public class TriviaServiceImpl implements ITriviaService {
         int nextTriviaId;
         if(totalAvailableTrivia == 0) startTrivia(level);
         if(totalTriviaAnswered.size() < level.getNumOfAllowedTriviaForLevel() && totalTriviaAnswered.size() < totalAvailableTrivia) {
-            log.info("before before putting into user answers");
             nextTriviaId = totalTriviaAnswered.size();
             trivia = triviaRepository.findByDifficultyLevelAndId(level, triviaIds.get(nextTriviaId)).orElse(null);
-           log.info("before putting into user answers");
             userTriviaAnswers.put((long)previousTriviaId, previousAnswers);
-            log.info("user trivia answers {}", userTriviaAnswers);
         } else return endTrivia(level);
         return getTriviaResponse(level, trivia, nextTriviaId);
     }
@@ -103,15 +103,19 @@ public class TriviaServiceImpl implements ITriviaService {
 
     @Override
     public GetTriviaResultResponse endTrivia(Trivia.DifficultyLevel level) {
-        triviaResult.setDifficulty_level(level.name());
-        calculateResult(level);
-        double scorePerQos =  100.0/level.getNumOfAllowedTriviaForLevel();
-        double totalScore  = scorePerQos * correctAnswersCount;
-        double percentScore = totalScore /100.0;
+        if (!resultComputed) {
+            triviaResult.setDifficulty_level(level.name());
+            calculateResult(level);
+            double scorePerQos = 100.0 / level.getNumOfAllowedTriviaForLevel();
+            double totalScore = scorePerQos * correctAnswersCount;
+            double percentScore = totalScore / 100.0;
 
-        triviaResult.updateTriviaSession(totalTriviaAnswered.size(), correctAnswersCount,
-                wrongAnswersCount, totalScore);
-      triviaResult.setPerformance(triviaResult.calculatePerformance(percentScore).name());
+            triviaResult.updateTriviaSession(totalTriviaAnswered.size(), correctAnswersCount,
+                    wrongAnswersCount, totalScore);
+            triviaResult.setPerformance(triviaResult.calculatePerformance(percentScore).name());
+            resultComputed = true;
+            saveTriviaAsHistory(triviaResult);
+        }
         return triviaResult;
     }
 
@@ -128,15 +132,51 @@ public class TriviaServiceImpl implements ITriviaService {
                         wrongAnswersCount++;
 
                 });
-        log.info("total correct answers {}", correctAnswersCount);
-        log.info("total wrong answers {}", wrongAnswersCount);
+    }
+
+    @Override
+    public long saveTriviaAsHistory(GetTriviaResultResponse completedTrivia) {
+
+        TriviaHistory triviaHistory = new TriviaHistory();
+        triviaHistory.setTriviaDate(Timestamp.valueOf(LocalDateTime.now()));
+        triviaHistory.setPassedTrivia(completedTrivia.getNum_passed_trivia());
+        triviaHistory.setFailedTrivia(completedTrivia.getNum_failed_trivia());
+        triviaHistory.setTotalScore(completedTrivia.getTotal_score());
+        triviaHistory.setDifficultyLevel(Trivia.DifficultyLevel.valueOf(completedTrivia.getDifficulty_level().trim()));
+        triviaHistory.setNumOfAnsweredTrivia(completedTrivia.getNum_of_answered_trivia());
+        triviaHistory.setPerformance(GetTriviaResultResponse.Performance.valueOf(completedTrivia.getPerformance().trim()));
+        triviaHistory.setAppUser(userService.getLoggedInUser());
+        triviaHistory.setTotalTriviaGiven((int)totalAvailableTrivia);
+
+        long lastInsertedId = triviaHistoryRepo.save(triviaHistory).getId();
+        log.info("trivia history with id {} successfully saved", lastInsertedId);
+        return lastInsertedId;
+    }
+
+    private void resetTriviaSessionData(){
+        totalAvailableTrivia = 0;
+        totalTriviaAnswered = new ArrayList<>();
+        resultComputed = false;
+        triviaResult = new GetTriviaResultResponse();
+        triviaIds = new ArrayList<>();
+        triviaCorrectAnswers = new HashMap<>();
+        userTriviaAnswers = new HashMap<>();
+        correctAnswersCount = 0;
+        wrongAnswersCount = 0;
+        resultComputed = false;
     }
 
 
 
     @Override
     public GetTriviaHistoryResponse getTriviaHistory() {
-        return null;
+        AppUser appUser = userService.getLoggedInUser();
+        List<TriviaHistory> triviaHistories = triviaHistoryRepo.findAllByAppUser(appUser).orElse(new ArrayList<>());
+        GetTriviaHistoryResponse historyResponse = new GetTriviaHistoryResponse();
+        historyResponse.setTrivia_history_list(triviaHistories);
+        historyResponse.setTotal_trivia_taken(triviaHistories.size());
+        historyResponse.setUsername(Optional.of(appUser.getUsername()).orElse("anonymous user"));
+        return historyResponse;
     }
 
 }

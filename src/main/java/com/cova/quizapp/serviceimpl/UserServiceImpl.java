@@ -8,6 +8,9 @@ import com.cova.quizapp.service.IUserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +43,7 @@ public class UserServiceImpl implements IUserService {
             throw new UserSignUpOrSignInException("password fields and confirm passwords field do not match");
         }
 
-        if(userRepository.findByUsername(param.getUsername()) == null) {
+        if(!userRepository.findByUsername(param.getUsername()).isPresent()) {
             AppUser newUser = AppUser.builder()
                     .firstname(param.getFirstname())
                     .lastname(param.getLastname())
@@ -57,5 +60,13 @@ public class UserServiceImpl implements IUserService {
         else {
             throw new UserSignUpOrSignInException("that username already exists - please try another one");
         }
+    }
+
+    @Override
+    public AppUser getLoggedInUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username =  (String) auth.getPrincipal();
+        return userRepository.findByUsername(username)
+                .orElse(AppUser.builder().build());
     }
 }

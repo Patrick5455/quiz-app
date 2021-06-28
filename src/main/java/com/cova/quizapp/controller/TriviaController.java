@@ -34,9 +34,7 @@ public class TriviaController {
           level  = Trivia.DifficultyLevel.valueOf(selectedLevel);
         }
         triviaService.startTrivia(level);
-        log.info("Trivia Started");
         TriviaResponse trivia = triviaService.getNextTrivia(level);
-        log.info("trivia: {}", trivia);
         return ResponseEntity.ok().body(trivia);
     }
 
@@ -53,6 +51,12 @@ public class TriviaController {
     public ResponseEntity<?> endTrivia(@RequestParam("level") String level){
         TriviaResponse response = triviaService.endTrivia(Trivia.DifficultyLevel.valueOf(level));
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/trivia-history")
+    public ResponseEntity<?> getTriviaHistory(){
+        TriviaResponse triviaResponse = triviaService.getTriviaHistory();
+        return ResponseEntity.ok(triviaResponse);
     }
 
 }

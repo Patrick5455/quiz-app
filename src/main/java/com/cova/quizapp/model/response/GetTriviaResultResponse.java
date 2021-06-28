@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @JsonDeserialize
 @Slf4j
 public class GetTriviaResultResponse implements TriviaResponse{
-    private int num_of_answered_questions;
+    private int num_of_answered_trivia;
     private int num_passed_trivia;
     private int num_failed_trivia;
     private double total_score;
@@ -18,7 +18,7 @@ public class GetTriviaResultResponse implements TriviaResponse{
 
    public void updateTriviaSession(int num_of_answered_questions, int num_passed_trivia,
                              int num_failed_trivia, double total_score){
-        setNum_of_answered_questions(num_of_answered_questions);
+        setNum_of_answered_trivia(num_of_answered_questions);
         setNum_passed_trivia(num_passed_trivia);
         setNum_failed_trivia(num_failed_trivia);
         setTotal_score(total_score);
@@ -26,7 +26,7 @@ public class GetTriviaResultResponse implements TriviaResponse{
 
    public void updateTriviaSession(int num_of_answered_questions, int total_passed,
                              int total_failed, int total_score,  String performance){
-        setNum_of_answered_questions(num_of_answered_questions);
+        setNum_of_answered_trivia(num_of_answered_questions);
         setNum_passed_trivia(total_passed);
         setNum_failed_trivia(total_failed);
         setPerformance(performance);

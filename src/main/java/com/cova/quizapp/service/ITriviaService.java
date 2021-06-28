@@ -1,10 +1,11 @@
 package com.cova.quizapp.service;
 
 import com.cova.quizapp.model.entity.Trivia;
-
+import com.cova.quizapp.model.response.GetTriviaResultResponse;
 import com.cova.quizapp.model.response.TriviaResponse;
-
 public interface ITriviaService {
+
+
 
      /**
       * @param level trivia difficulty level
@@ -36,16 +37,17 @@ public interface ITriviaService {
       **/
      TriviaResponse endTrivia(Trivia.DifficultyLevel level);
 
-
      /**
       *
       * @param level difficulty level
       */
      void calculateResult(Trivia.DifficultyLevel level);
 
-
-
-
-
+     /****
+      *
+      * @param completedTrivia an instance of GetTriviaResultResponse that has been computed
+      * @return last inserted id - the id of the newly saved entity to TRIVIA_HISTORY repo
+      */
+     long saveTriviaAsHistory(GetTriviaResultResponse completedTrivia);
 
 }

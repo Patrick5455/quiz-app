@@ -1,6 +1,7 @@
 package com.cova.quizapp.service;
 
 import com.cova.quizapp.exception.UserSignUpOrSignInException;
+import com.cova.quizapp.model.entity.AppUser;
 import com.cova.quizapp.model.request.CreateUserRequest;
 
 public interface IUserService {
@@ -11,4 +12,6 @@ public interface IUserService {
      * @return the generated id of the new user
      */
     long createUser(CreateUserRequest createUserRequest) throws UserSignUpOrSignInException;
+
+    AppUser getLoggedInUser();
 }
