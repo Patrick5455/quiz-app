@@ -34,9 +34,7 @@ public class TriviaController {
           level  = Trivia.DifficultyLevel.valueOf(selectedLevel);
         }
         triviaService.startTrivia(level);
-        log.info("Trivia Started");
         TriviaResponse trivia = triviaService.getNextTrivia(level);
-        log.info("trivia: {}", trivia);
         return ResponseEntity.ok().body(trivia);
     }
 

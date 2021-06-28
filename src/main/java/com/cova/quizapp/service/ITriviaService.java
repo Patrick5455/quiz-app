@@ -1,10 +1,10 @@
 package com.cova.quizapp.service;
 
 import com.cova.quizapp.model.entity.Trivia;
-
 import com.cova.quizapp.model.response.TriviaResponse;
-
 public interface ITriviaService {
+
+
 
      /**
       * @param level trivia difficulty level
@@ -36,16 +36,10 @@ public interface ITriviaService {
       **/
      TriviaResponse endTrivia(Trivia.DifficultyLevel level);
 
-
      /**
       *
       * @param level difficulty level
       */
      void calculateResult(Trivia.DifficultyLevel level);
-
-
-
-
-
 
 }

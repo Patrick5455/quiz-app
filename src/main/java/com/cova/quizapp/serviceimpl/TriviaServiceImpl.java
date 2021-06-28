@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,17 +27,16 @@ public class TriviaServiceImpl implements ITriviaService {
     private TriviaRepository triviaRepository;;
     private TriviaHistoryRepo triviaHistoryRepo;
 
-    static long totalAvailableTrivia =0;
-    static List<Integer> totalTriviaAnswered = new ArrayList<>();
-    static GetTriviaResultResponse triviaResult = new GetTriviaResultResponse();
-    static int BONUS_TRIVIA = 0;
-    static List<Long> triviaIds = new ArrayList<>();
-    static Map<Long, String> triviaCorrectAnswers = new HashMap<>();
-    static Map<Long, String> userTriviaAnswers = new HashMap<>();
-    static int correctAnswersCount =0 ;
-    static int wrongAnswersCount =0;
-
-
+    static long totalAvailableTrivia;
+    static List<Integer> totalTriviaAnswered ;
+    static GetTriviaResultResponse triviaResult;
+    static int BONUS_TRIVIA;
+    static List<Long> triviaIds;
+    static Map<Long, String> triviaCorrectAnswers;
+    static Map<Long, String> userTriviaAnswers;
+    static int correctAnswersCount;
+    static int wrongAnswersCount;
+    static boolean resultComputed;
 
     @Autowired
     public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo){
@@ -48,13 +46,10 @@ public class TriviaServiceImpl implements ITriviaService {
 
     @Override
     public void startTrivia(Trivia.DifficultyLevel level) {
-        if(totalAvailableTrivia > 0) totalAvailableTrivia = 0;
-        // get list of trivia to be asked from DB
+        resetTriviaSessionData();
         List<Trivia> triviaList = triviaRepository.findByDifficultyLevel(level).orElse(new ArrayList<>());
-        // get ids of fetched trivia
         triviaIds = triviaList.stream().map(Trivia::getId).collect(Collectors.toList());
         totalAvailableTrivia = triviaList.size();
-        // get answers of fetched list of trivia
         triviaList.forEach(T -> triviaCorrectAnswers.put(T.getId(), T.getAnswer()));
     }
 
@@ -64,12 +59,9 @@ public class TriviaServiceImpl implements ITriviaService {
         int nextTriviaId;
         if(totalAvailableTrivia == 0) startTrivia(level);
         if(totalTriviaAnswered.size() < level.getNumOfAllowedTriviaForLevel() && totalTriviaAnswered.size() < totalAvailableTrivia) {
-            log.info("before before putting into user answers");
             nextTriviaId = totalTriviaAnswered.size();
             trivia = triviaRepository.findByDifficultyLevelAndId(level, triviaIds.get(nextTriviaId)).orElse(null);
-           log.info("before putting into user answers");
             userTriviaAnswers.put((long)previousTriviaId, previousAnswers);
-            log.info("user trivia answers {}", userTriviaAnswers);
         } else return endTrivia(level);
         return getTriviaResponse(level, trivia, nextTriviaId);
     }
@@ -103,15 +95,18 @@ public class TriviaServiceImpl implements ITriviaService {
 
     @Override
     public GetTriviaResultResponse endTrivia(Trivia.DifficultyLevel level) {
-        triviaResult.setDifficulty_level(level.name());
-        calculateResult(level);
-        double scorePerQos =  100.0/level.getNumOfAllowedTriviaForLevel();
-        double totalScore  = scorePerQos * correctAnswersCount;
-        double percentScore = totalScore /100.0;
+        if (!resultComputed) {
+            triviaResult.setDifficulty_level(level.name());
+            calculateResult(level);
+            double scorePerQos = 100.0 / level.getNumOfAllowedTriviaForLevel();
+            double totalScore = scorePerQos * correctAnswersCount;
+            double percentScore = totalScore / 100.0;
 
-        triviaResult.updateTriviaSession(totalTriviaAnswered.size(), correctAnswersCount,
-                wrongAnswersCount, totalScore);
-      triviaResult.setPerformance(triviaResult.calculatePerformance(percentScore).name());
+            triviaResult.updateTriviaSession(totalTriviaAnswered.size(), correctAnswersCount,
+                    wrongAnswersCount, totalScore);
+            triviaResult.setPerformance(triviaResult.calculatePerformance(percentScore).name());
+            resultComputed = true;
+        }
         return triviaResult;
     }
 
@@ -128,8 +123,19 @@ public class TriviaServiceImpl implements ITriviaService {
                         wrongAnswersCount++;
 
                 });
-        log.info("total correct answers {}", correctAnswersCount);
-        log.info("total wrong answers {}", wrongAnswersCount);
+    }
+
+    private void resetTriviaSessionData(){
+        totalAvailableTrivia = 0;
+        totalTriviaAnswered = new ArrayList<>();
+        resultComputed = false;
+        triviaResult = new GetTriviaResultResponse();
+        triviaIds = new ArrayList<>();
+        triviaCorrectAnswers = new HashMap<>();
+        userTriviaAnswers = new HashMap<>();
+        correctAnswersCount = 0;
+        wrongAnswersCount = 0;
+        resultComputed = false;
     }
 
 
