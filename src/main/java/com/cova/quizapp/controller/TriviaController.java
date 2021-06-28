@@ -4,6 +4,7 @@ import com.cova.quizapp.model.entity.Trivia;
 import com.cova.quizapp.model.response.TriviaResponse;
 import com.cova.quizapp.service.ITriviaService;
 import com.cova.quizapp.serviceimpl.TriviaServiceImpl;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TriviaController {
 
-    private ITriviaService triviaService;
+    private final ITriviaService triviaService;
 
     @Autowired
     public TriviaController(TriviaServiceImpl triviaService){
