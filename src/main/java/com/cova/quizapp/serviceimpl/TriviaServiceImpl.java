@@ -148,6 +148,7 @@ public class TriviaServiceImpl implements ITriviaService {
         triviaHistory.setNumOfAnsweredTrivia(completedTrivia.getNum_of_answered_trivia());
         triviaHistory.setPerformance(GetTriviaResultResponse.Performance.valueOf(completedTrivia.getPerformance().trim()));
         triviaHistory.setAppUser(userService.getLoggedInUser());
+        triviaHistory.setTotalTriviaGiven((int)totalAvailableTrivia);
 
         long lastInsertedId = triviaHistoryRepo.save(triviaHistory).getId();
         log.info("trivia history with id {} successfully saved", lastInsertedId);

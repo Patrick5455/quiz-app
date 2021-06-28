@@ -48,7 +48,10 @@ public class TriviaHistory {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private AppUser appUser;
-    s
+
+    @Column(name = "total_trivia_given")
+    private Integer totalTriviaGiven;
+
 
     @Override
     public int hashCode() {

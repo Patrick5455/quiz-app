@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS TRIVIA_HISTORY (
                                               difficulty_level VARCHAR(256) NOT NULL,
                                               num_of_answered_trivia INT NOT NULL ,
                                               performance VARCHAR(256) NOT NULL ,
+                                              total_trivia_given INT NOT NULL ,
                                              user_id INT,
                                               FOREIGN KEY (user_id) REFERENCES APP_USER (id)
 );
