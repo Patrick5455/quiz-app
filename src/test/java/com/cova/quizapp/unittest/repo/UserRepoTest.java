@@ -2,6 +2,7 @@ package com.cova.quizapp.unittest.repo;
 
 import com.cova.quizapp.data.UserRepository;
 import com.cova.quizapp.model.entity.AppUser;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Timestamp;
@@ -18,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
+@Slf4j
+@Sql(scripts = {"classpath:/test-schema.sql",
+        "classpath:/test-data.sql" })
 public class UserRepoTest {
 
     @Autowired
@@ -33,7 +38,7 @@ public class UserRepoTest {
         appUser1.setFirstname("Test");
         appUser1.setLastname("User");
         appUser1.setEmail("testuser@testmail.com");
-        appUser1.setUsername("testuser1");
+        appUser1.setUsername("alpha");
         appUser1.setPassword("test-password");
         appUser1.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         appUser1.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
@@ -42,7 +47,7 @@ public class UserRepoTest {
         appUser2.setFirstname("Test");
         appUser2.setLastname("User2");
         appUser2.setEmail("testuser2@testmail.com");
-        appUser2.setUsername("testuser2");
+        appUser2.setUsername("beta");
         appUser2.setPassword("test-password");
         appUser2.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         appUser2.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
@@ -51,7 +56,7 @@ public class UserRepoTest {
         appUser3.setFirstname("Test");
         appUser3.setLastname("User3");
         appUser3.setEmail("testuser3@testmail.com");
-        appUser3.setUsername("testuser3");
+        appUser3.setUsername("zee");
         appUser3.setPassword("test-password");
         appUser3.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         appUser3.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
@@ -63,20 +68,26 @@ public class UserRepoTest {
     public void when_an_app_user_is_created_can_be_saved_to_the_DB(){
        long lastInsertedId =   userRepository.save(appUser1).getId();
        assertEquals(lastInsertedId, 1);
+       log.info("user1 successfully inserted");
+
+        AppUser appUser = userRepository.findByUsername("alpha").orElse(null);
+        assertNotNull(appUser,"actual user from DB is null");
 
          lastInsertedId =   userRepository.save(appUser2).getId();
         assertEquals(lastInsertedId, 2);
+        log.info("user2 successfully inserted");
 
         lastInsertedId =   userRepository.save(appUser3).getId();
         assertEquals(lastInsertedId, 3);
+        log.info("user3 successfully inserted");
     }
 
-    @Test
-    @DisplayName("we_can_find_an_existing_app_user_by_username")
-    public void we_can_find_an_existing_app_user_by_username(){
-        AppUser appUser = userRepository.findByUsername("testuser1").orElse(null);
-        assertNotNull(appUser,"actual user from DB is null");
-    }
+//    @Test
+//    @DisplayName("we_can_find_an_existing_app_user_by_username")
+//    public void we_can_find_an_existing_app_user_by_username(){
+//        AppUser appUser = userRepository.findByUsername("alpha").orElse(null);
+//        assertNotNull(appUser,"actual user from DB is null");
+//    }
 
     @Test
     @DisplayName("we cannot_find_non_existing_app_user_by_username")

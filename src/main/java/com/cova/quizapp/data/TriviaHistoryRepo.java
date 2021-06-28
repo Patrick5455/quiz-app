@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface TriviaHistoryRepo extends JpaRepository<TriviaHistory, Long> {
 
     Optional<List<TriviaHistory>> findAllByAppUser(AppUser appUser);
+
 }
