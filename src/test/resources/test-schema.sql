@@ -1,9 +1,5 @@
-DROP SCHEMA TESTQUIZDB;
 
-CREATE SCHEMA IF NOT EXISTS TESTQUIZDB;
-
-
-CREATE TABLE  APP_USER(
+CREATE TABLE  IF NOT EXISTS  APP_USER(
                                          id INT AUTO_INCREMENT   PRIMARY KEY,
                                          first_name VARCHAR(256) NOT NULL,
                                          last_name VARCHAR(250) NOT NULL,
@@ -16,18 +12,23 @@ CREATE TABLE  APP_USER(
                                          deleted_at timestamp
 );
 
-CREATE TABLE TRIVIA(
+CREATE TABLE IF NOT EXISTS TRIVIA(
                                      id INT AUTO_INCREMENT   PRIMARY KEY,
                                      question VARCHAR (256) NOT NULL,
                                      answer VARCHAR (256) NOT NULL,
-                                     difficulty_level VARCHAR (256)
+                                     difficulty_level VARCHAR (256) NOT NULL
 );
 
-CREATE TABLE TRIVIA_HISTORY (
+CREATE TABLE IF NOT EXISTS TRIVIA_HISTORY (
                                               id INT AUTO_INCREMENT PRIMARY KEY,
-                                              date_of_trivia timestamp,
-                                              num_passed_trivia INT,
-                                              num_failed_trivia INT,
+                                              date_of_trivia timestamp NOT NULL ,
+                                              num_passed_trivia INT NOT NULL ,
+                                              num_failed_trivia INT NOT NULL,
+                                              total_score FLOAT,
+                                              difficulty_level VARCHAR(256) NOT NULL,
+                                              num_of_answered_trivia INT NOT NULL ,
+                                              performance VARCHAR(256) NOT NULL ,
+                                              total_trivia_given INT NOT NULL ,
                                               user_id INT,
                                               FOREIGN KEY (user_id) REFERENCES APP_USER (id)
 );
