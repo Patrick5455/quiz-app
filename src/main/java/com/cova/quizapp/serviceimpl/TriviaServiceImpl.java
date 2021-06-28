@@ -3,16 +3,23 @@ package com.cova.quizapp.serviceimpl;
 import com.cova.quizapp.data.TriviaHistoryRepo;
 import com.cova.quizapp.data.TriviaRepository;
 import com.cova.quizapp.model.entity.Trivia;
+import com.cova.quizapp.model.entity.TriviaHistory;
 import com.cova.quizapp.model.response.GetNewTriviaResponse;
 import com.cova.quizapp.model.response.GetTriviaHistoryResponse;
 import com.cova.quizapp.model.response.GetTriviaResultResponse;
 import com.cova.quizapp.model.response.TriviaResponse;
 import com.cova.quizapp.service.ITriviaService;
+import com.cova.quizapp.service.IUserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +33,7 @@ public class TriviaServiceImpl implements ITriviaService {
 
     private TriviaRepository triviaRepository;;
     private TriviaHistoryRepo triviaHistoryRepo;
+    private IUserService userService;
 
     static long totalAvailableTrivia;
     static List<Integer> totalTriviaAnswered ;
@@ -39,9 +47,11 @@ public class TriviaServiceImpl implements ITriviaService {
     static boolean resultComputed;
 
     @Autowired
-    public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo){
+    public TriviaServiceImpl(TriviaRepository triviaRepository, TriviaHistoryRepo repo,
+                             UserServiceImpl userService){
         this.triviaRepository = triviaRepository;
         triviaHistoryRepo = repo;
+        this.userService = userService;
     }
 
     @Override
@@ -106,6 +116,7 @@ public class TriviaServiceImpl implements ITriviaService {
                     wrongAnswersCount, totalScore);
             triviaResult.setPerformance(triviaResult.calculatePerformance(percentScore).name());
             resultComputed = true;
+            saveTriviaAsHistory(triviaResult);
         }
         return triviaResult;
     }
@@ -125,6 +136,24 @@ public class TriviaServiceImpl implements ITriviaService {
                 });
     }
 
+    @Override
+    public long saveTriviaAsHistory(GetTriviaResultResponse completedTrivia) {
+
+        TriviaHistory triviaHistory = new TriviaHistory();
+        triviaHistory.setTriviaDate(Timestamp.valueOf(LocalDateTime.now()));
+        triviaHistory.setPassedTrivia(completedTrivia.getNum_passed_trivia());
+        triviaHistory.setFailedTrivia(completedTrivia.getNum_failed_trivia());
+        triviaHistory.setTotalScore(completedTrivia.getTotal_score());
+        triviaHistory.setDifficultyLevel(Trivia.DifficultyLevel.valueOf(completedTrivia.getDifficulty_level().trim()));
+        triviaHistory.setNumOfAnsweredTrivia(completedTrivia.getNum_of_answered_trivia());
+        triviaHistory.setPerformance(GetTriviaResultResponse.Performance.valueOf(completedTrivia.getPerformance().trim()));
+        triviaHistory.setAppUser(userService.getLoggedInUser());
+
+        long lastInsertedId = triviaHistoryRepo.save(triviaHistory).getId();
+        log.info("trivia history with id {} successfully saved", lastInsertedId);
+        return lastInsertedId;
+    }
+
     private void resetTriviaSessionData(){
         totalAvailableTrivia = 0;
         totalTriviaAnswered = new ArrayList<>();
@@ -142,6 +171,9 @@ public class TriviaServiceImpl implements ITriviaService {
 
     @Override
     public GetTriviaHistoryResponse getTriviaHistory() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) auth.getPrincipal()).getUsername();
+
         return null;
     }
 

@@ -31,11 +31,11 @@ public class TriviaHistory {
     private Integer failedTrivia;
 
     @Column(name = "total_score")
-    private Integer totalScore;
+    private Double totalScore;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "difficulty_level")
-    private Trivia.DifficultyLevel level;
+    private Trivia.DifficultyLevel difficultyLevel;
 
     @Column(name = "num_of_answered_trivia")
     private Integer numOfAnsweredTrivia;
@@ -48,12 +48,7 @@ public class TriviaHistory {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private AppUser appUser;
-
-
-
-    @Column(name = "total_trivia_answered")
-    private Integer totalTriviaAnswered;
-
+    s
 
     @Override
     public int hashCode() {

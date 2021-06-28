@@ -1,9 +1,7 @@
 package com.cova.quizapp.model.response;
 
 import com.cova.quizapp.model.entity.TriviaHistory;
-import lombok.Builder;
 import lombok.Data;
-
 import java.util.List;
 
 @Data
