@@ -1,8 +1,6 @@
--- DROP IF EXISTS DATABASE covatriviadb;
+-- DROP IF EXISTS EXISTS covatriviadb;
 
--- CREATE DATABASE IF NOT EXISTS covatriviadb;
-
-USE covatriviadb;
+-- CREATE SCHEMA IF NOT EXISTS covatriviadb;
 
 CREATE TABLE  IF NOT EXISTS  APP_USER(
                                          id INT AUTO_INCREMENT   PRIMARY KEY,
