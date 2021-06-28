@@ -53,4 +53,10 @@ public class TriviaController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/trivia-history")
+    public ResponseEntity<?> getTriviaHistory(){
+        TriviaResponse triviaResponse = triviaService.getTriviaHistory();
+        return ResponseEntity.ok(triviaResponse);
+    }
+
 }

@@ -66,9 +66,7 @@ public class UserServiceImpl implements IUserService {
     public AppUser getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username =  (String) auth.getPrincipal();
-        AppUser appUser = userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElse(AppUser.builder().build());
-        log.info("logged in user: {}", appUser);
-        return appUser;
     }
 }

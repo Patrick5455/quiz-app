@@ -2,6 +2,7 @@ package com.cova.quizapp.serviceimpl;
 
 import com.cova.quizapp.data.TriviaHistoryRepo;
 import com.cova.quizapp.data.TriviaRepository;
+import com.cova.quizapp.model.entity.AppUser;
 import com.cova.quizapp.model.entity.Trivia;
 import com.cova.quizapp.model.entity.TriviaHistory;
 import com.cova.quizapp.model.response.GetNewTriviaResponse;
@@ -20,10 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -172,10 +170,13 @@ public class TriviaServiceImpl implements ITriviaService {
 
     @Override
     public GetTriviaHistoryResponse getTriviaHistory() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) auth.getPrincipal()).getUsername();
-
-        return null;
+        AppUser appUser = userService.getLoggedInUser();
+        List<TriviaHistory> triviaHistories = triviaHistoryRepo.findAllByAppUser(appUser).orElse(new ArrayList<>());
+        GetTriviaHistoryResponse historyResponse = new GetTriviaHistoryResponse();
+        historyResponse.setTrivia_history_list(triviaHistories);
+        historyResponse.setTotal_trivia_taken(triviaHistories.size());
+        historyResponse.setUsername(Optional.of(appUser.getUsername()).orElse("anonymous user"));
+        return historyResponse;
     }
 
 }
