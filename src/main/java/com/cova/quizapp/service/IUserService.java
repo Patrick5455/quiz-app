@@ -14,4 +14,6 @@ public interface IUserService {
     long createUser(CreateUserRequest createUserRequest) throws UserSignUpOrSignInException;
 
     AppUser getLoggedInUser();
+
+    AppUser findUserByUsername(String username);
 }

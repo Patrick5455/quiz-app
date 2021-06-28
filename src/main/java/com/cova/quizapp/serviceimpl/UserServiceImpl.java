@@ -10,12 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @Data
@@ -68,5 +72,10 @@ public class UserServiceImpl implements IUserService {
         String username =  (String) auth.getPrincipal();
         return userRepository.findByUsername(username)
                 .orElse(AppUser.builder().build());
+    }
+
+    @Override
+    public AppUser findUserByUsername(String username) {
+        return Optional.of(userRepository.findByUsername(username)).get().orElseThrow(() -> new UsernameNotFoundException("error"));
     }
 }
