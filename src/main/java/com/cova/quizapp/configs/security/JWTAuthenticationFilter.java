@@ -26,13 +26,11 @@ import java.util.Date;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.cova.quizapp.util.constant.SecurityConstants.*;
 
-@Component
 @Slf4j
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
     public JWTAuthenticationFilter(AuthenticationManager authMgr) {
         super(authMgr);
         authenticationManager = authMgr;
@@ -54,9 +52,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 );
             }
             catch (Exception e){
+                log.error("incorrect login details");
                 throw new UsernameNotFoundException("incorrect login details");
             }
         } catch (IOException e) {
+            log.info("throwing runtime error - unexpected exception during login authentication attempt");
             throw new RuntimeException(e);
         }
     }
@@ -67,7 +67,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                          HttpServletResponse res,
                                          FilterChain chain,
                                          Authentication auth) throws IOException, ServletException{
-
 
         String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())

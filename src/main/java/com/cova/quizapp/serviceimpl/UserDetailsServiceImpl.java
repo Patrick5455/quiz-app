@@ -5,6 +5,7 @@ import com.cova.quizapp.model.entity.AppUser;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,9 +29,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser =  Optional.of(userRepository.findByUsername(username)).get().orElseThrow(() -> new UsernameNotFoundException("error"));
-        UserDetails userDetails = new User(appUser.getUsername(), appUser.getPassword(), new ArrayList<>());
+        AppUser appUser =  userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("incorrect username") {});
         log.info("login request user found");
-        return userDetails;
+        return new User(appUser.getUsername(), appUser.getPassword(), new ArrayList<>());
     }
 }

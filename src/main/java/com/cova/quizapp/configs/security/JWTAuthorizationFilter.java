@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.cova.quizapp.util.constant.SecurityConstants.*;
 
-@Component
 @Slf4j
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    @Autowired
+    private final AuthenticationManager authenticationManager;
+
+
     public JWTAuthorizationFilter(AuthenticationManager authManager){
         super(authManager);
+        authenticationManager = authManager;
     }
 
     @Override
@@ -51,8 +53,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             String user = JWT.require(HMAC512(SECRET.getBytes())).build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
-
-
             if(user != null){
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }

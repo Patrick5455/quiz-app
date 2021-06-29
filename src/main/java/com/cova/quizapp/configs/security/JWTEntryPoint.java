@@ -22,15 +22,16 @@ import java.io.OutputStream;
 @Configuration
 public class JWTEntryPoint implements AuthenticationEntryPoint {
 
-    @Autowired
+
     @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver resolver;
+    private   HandlerExceptionResolver resolver;
+
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         ServletServerHttpResponse res = new ServletServerHttpResponse(response);
-        response.setStatus(400);
         res.getBody().write(new ObjectMapper().writeValueAsBytes(ApiResponse.errorMessage("incorrect login details", 400)));
+        response.setStatus(400);
         resolver.resolveException(request, response,  null, e);
     }
 }
