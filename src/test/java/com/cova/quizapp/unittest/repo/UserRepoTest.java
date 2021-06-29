@@ -64,30 +64,29 @@ public class UserRepoTest {
     }
 
     @Test
-    @DisplayName("when_an_app_user_is_created_can_be_saved_to_the_DB")
-    public void when_an_app_user_is_created_can_be_saved_to_the_DB(){
+    @DisplayName("when_an_app_user_is_created_can_be_saved_to_the_DB_and_we_can_find_the_user_by_the_user_id")
+    public void when_an_app_user_is_created_can_be_saved_to_the_DB_and_we_can_find_the_user_by_the_user_id(){
        long lastInsertedId =   userRepository.save(appUser1).getId();
        assertEquals(lastInsertedId, 1);
-       log.info("user1 successfully inserted");
-
+       log.info("user successfully inserted");
         AppUser appUser = userRepository.findByUsername("alpha").orElse(null);
         assertNotNull(appUser,"actual user from DB is null");
+        log.info("user with username alpha was successfully found");
 
          lastInsertedId =   userRepository.save(appUser2).getId();
         assertEquals(lastInsertedId, 2);
-        log.info("user2 successfully inserted");
+        log.info("user successfully inserted");
+        AppUser appUser2 = userRepository.findByUsername("beta").orElse(null);
+        assertNotNull(appUser2,"actual user from DB is null");
+        log.info("user with username alpha was successfully found");
 
         lastInsertedId =   userRepository.save(appUser3).getId();
         assertEquals(lastInsertedId, 3);
         log.info("user3 successfully inserted");
+        AppUser appUser3 = userRepository.findByUsername("zee").orElse(null);
+        assertNotNull(appUser3,"actual user from DB is null");
+        log.info("user with username zee was successfully found");
     }
-
-//    @Test
-//    @DisplayName("we_can_find_an_existing_app_user_by_username")
-//    public void we_can_find_an_existing_app_user_by_username(){
-//        AppUser appUser = userRepository.findByUsername("alpha").orElse(null);
-//        assertNotNull(appUser,"actual user from DB is null");
-//    }
 
     @Test
     @DisplayName("we cannot_find_non_existing_app_user_by_username")
