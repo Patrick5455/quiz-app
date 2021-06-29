@@ -30,6 +30,7 @@ public class ApiResponse {
     public static ApiResponse errorMessage(String message, int status){
        return  ApiResponse.builder()
                .message(message)
+               .data("")
                .status(status)
                .build();
     }
@@ -37,6 +38,8 @@ public class ApiResponse {
     public static ApiResponse errorMessage(String message){
         return  ApiResponse.builder()
                 .message(message)
+                .data("")
+                .status(400)
                 .build();
     }
 }

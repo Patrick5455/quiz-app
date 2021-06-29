@@ -2,16 +2,19 @@ package com.cova.quizapp.configs.security;
 
 import com.cova.quizapp.serviceimpl.UserDetailsServiceImpl;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import static com.cova.quizapp.util.constant.SecurityConstants.SIGN_UP_URL;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -19,6 +22,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @Configuration
 @Data
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsService;
@@ -28,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JWTEntryPoint jwtEntryPoint;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder encoder, JWTEntryPoint jwt){
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder encoder, JWTEntryPoint jwt) {
         this.userDetailsService = userDetailsService;
         this.encoder = encoder;
         this.jwtEntryPoint = jwt;
@@ -44,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll().anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtEntryPoint)
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                .authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManagerBean()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManagerBean()))
@@ -59,10 +64,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        return super.authenticationManagerBean();
     }
 
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.parentAuthenticationManager(authenticationManagerBean())
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder);
+            auth.userDetailsService(userDetailsService)
+                    .passwordEncoder(encoder);
     }
 
 }

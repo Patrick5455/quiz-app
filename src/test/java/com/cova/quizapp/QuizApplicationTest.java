@@ -1,5 +1,7 @@
 package com.cova.quizapp;
 
+import com.cova.quizapp.model.entity.Trivia;
+import com.cova.quizapp.unittest.repo.TriviaRepoTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,7 @@ public class QuizApplicationTest {
 
     @Test
     public void context(){
+
 
     }
 }
