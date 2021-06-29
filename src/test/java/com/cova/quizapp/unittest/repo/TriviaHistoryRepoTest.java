@@ -39,16 +39,10 @@ public class TriviaHistoryRepoTest {
 
 
     @Test
-    public void findAllByAppUser(){
+    public void find_all_trivia_answered_by_a_user(){
         Assertions.assertNotNull(appUser, "cannot use a non existent user to get trivia history");
      List<TriviaHistory> histories = triviaHistoryRepo.findAllByAppUser(appUser).orElse(null);
      Assertions.assertNotNull(histories);
     }
-
-
-
-
-
-
 
 }

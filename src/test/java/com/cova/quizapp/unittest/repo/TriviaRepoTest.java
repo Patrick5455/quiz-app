@@ -30,31 +30,31 @@ public class TriviaRepoTest {
     }
 
     @Test
-    void countAllByDifficultyLevel() {
+    void we_can_get_count_of_trivias_by_their_difficulty_level() {
       long count =  triviaRepository.countAllByDifficultyLevel(Trivia.DifficultyLevel.HARD);
       Assertions.assertEquals(count, 2);
     }
 
     @Test
-    void getTriviaIds() {
+    void we_can_get_trivia_ids_by_difficulty_level() {
        List<Long> triviaIds =  triviaRepository.getTriviaIds("HARD").orElse(null);
        Assertions.assertNotNull(triviaIds);
     }
 
     @Test
-    void findByDifficultyLevel() {
+    void we_can_get_list_of_trivia_by_their_difficulty_level() {
        List<Trivia> hardTrivia =  triviaRepository.findByDifficultyLevel(Trivia.DifficultyLevel.HARD).orElse(null);
        Assertions.assertNotNull(hardTrivia);
     }
 
     @Test
-    void findByDifficultyLevelAndId() {
+    void find_by_difficulty_level_and_id() {
        Trivia trivia = triviaRepository.findByDifficultyLevelAndId(Trivia.DifficultyLevel.EASY, 1).orElse(null);
        Assertions.assertNotNull(trivia);
     }
 
     @Test
-    void findTriviaAnswer() {
+    void find_trivia_answer_by_id() {
         String answer = triviaRepository.findTriviaAnswer(1);
         Assertions.assertNotNull(answer);
     }
